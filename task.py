@@ -452,12 +452,3 @@ def load_data():
         dataset = pd.read_csv(file_path)
         messagebox.showinfo("Information", "Data loaded successfully!")
         print(dataset.head())  #  display in the GUI
-
-# Handle Missing Values Function
-def handle_missing_values():
-    global dataset
-    if dataset is not None:
-        dataset.dropna(inplace=True)
-        messagebox.showinfo("Information", "Missing values handled.")
-    else:
-        messagebox.showerror("Error", "Data not loaded.")
