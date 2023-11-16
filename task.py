@@ -216,4 +216,37 @@ total, rule = e1.count_neutral(df, return_rule=True)
 print(rule)
 # Define a threshold for removal
 threshold = len(df.columns) / 2
+# Grouping by Gender and counting
 
+data = {
+    'Gender': ['Male', 'Female', 'Non-binary', 'Male', 'Female', 'Non-binary', 'Male'],
+    'Count': [10, 20, 5, 10, 20, 5, 10]  # Example counts
+}
+dataset = pd.DataFrame(data)
+
+maindata = 'C:/Users/TEMA/OneDrive/Desktop/data.csv'
+dataset = pd.read_csv(maindata)
+root = tk.Tk()
+root.title("Data Analysis")
+root.geometry("800x600")
+
+# Frame for plotting
+plot_frame = tk.Frame(root)
+plot_frame.pack(fill=tk.BOTH, expand=True)
+
+
+def show_plot(plot_function):
+    # Clear previous plot
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+
+    fig = Figure(figsize=(10, 6), dpi=100)
+    ax = fig.add_subplot(111)
+
+    # Call the plotting function
+    plot_function(dataset, ax)
+
+    # Embed the plot in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
