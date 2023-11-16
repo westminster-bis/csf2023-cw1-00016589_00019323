@@ -250,3 +250,109 @@ def show_plot(plot_function):
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    def plot_age_distribution(data, ax):
+        sns.countplot(data=data, x='Age', ax=ax)  # Replace 'Age' with your column name
+
+    def plot_nationality_distrubution(data, ax):
+        sns.countplot(data=data, x='Nationality', ax=ax)
+
+    def plot_Program_distrubution(data, ax):
+        sns.countplot(data=data, x='Program', ax=ax)
+
+    def plot_English_distrubution(data, ax):
+        sns.countplot(data=data, x='English', ax=ax)
+
+    def plot_Attendance_distrubution(data, ax):
+        sns.countplot(data=data, x='Attendance', ax=ax)
+
+    def plot_Academic_distrubution(data, ax):
+        sns.countplot(data=data, x='Academic', ax=ax)
+
+    def plot_Course_distrubution(data, ax):
+        sns.countplot(data=data, x='Course', ax=ax)
+
+    def plot_gender_distribution(data, ax):
+        sns.countplot(data=data, x='Gender', ax=ax)  # Replace 'Gender' with your column name
+
+    # Buttons to trigger different plots
+    age_button = ttk.Button(root, text="Plot Age Distribution", command=lambda: show_plot(plot_age_distribution))
+    age_button.pack(side=tk.TOP, fill=tk.X)
+
+    gender_button = ttk.Button(root, text="Plot Gender Distribution",
+                               command=lambda: show_plot(plot_gender_distribution))
+    gender_button.pack(side=tk.TOP, fill=tk.X)
+    nationality_button = ttk.Button(root, text="Plot Nationality Distrubution",
+                                    command=lambda: show_plot(plot_nationality_distrubution))
+    nationality_button.pack(side=tk.TOP, fill=tk.X)
+    program_button = ttk.Button(root, text="Plot Program Distribution",
+                                command=lambda: show_plot(plot_Program_distrubution))
+    program_button.pack(side=tk.TOP, fill=tk.X)
+    english_button = ttk.Button(root, text="Plot English Distribution",
+                                command=lambda: show_plot(plot_English_distrubution))
+    english_button.pack(side=tk.TOP, fill=tk.X)
+    attendance_button = ttk.Button(root, text="Plot Attendance Distribution",
+                                   command=lambda: show_plot(plot_Attendance_distrubution))
+    attendance_button.pack(side=tk.TOP, fill=tk.X)
+    academic_button = ttk.Button(root, text="Plot Academic Distribution",
+                                 command=lambda: show_plot(plot_Academic_distrubution))
+    academic_button.pack(side=tk.TOP, fill=tk.X)
+    course_button = ttk.Button(root, text="Plot Course Distribution",
+                               command=lambda: show_plot(plot_Course_distrubution))
+    course_button.pack(side=tk.TOP, fill=tk.X)
+
+    root.mainloop()
+    # Frame for the selector and button
+    frame_controls = tk.Frame(root)
+    frame_controls.pack(fill='x')
+
+    # Label for the selector
+    label = tk.Label(frame_controls, text="Choose Gender Column:")
+    label.pack(side=tk.LEFT, padx=5, pady=5)
+
+    # Combobox to select the gender column
+    selector = ttk.Combobox(frame_controls, values=list(dataset.columns), state="readonly")
+    selector.set('Gender')  # default value
+    selector.pack(side=tk.LEFT, padx=5, pady=5)
+
+    # Button to plot gender distribution
+    button = ttk.Button(frame_controls, text='Plot Distribution', command=plot_gender_distribution)
+    button.pack(side=tk.LEFT, padx=5, pady=5)
+
+    # Run the application
+    root.mainloop()
+    # plt.show()
+    # Count the occurrences of each nationality
+    nationality_counts = df['Nationality'].value_counts().reset_index()
+    nationality_counts.columns = ['Nationality', 'Count']
+
+    # Set the size of the plot
+    plt.figure(figsize=(100, 8))
+
+    # Create a bar plot
+
+    # Assuming nationality_counts is a DataFrame with columns 'Nationality' and 'Count'
+    sns.barplot(x='Count', y='Nationality', hue='Nationality', data=nationality_counts, palette='Spectral',
+                legend=False)
+    # Add other customization as needed
+
+    # Add labels and title
+    plt.xlabel('Count', fontsize=14)
+    plt.ylabel('Nationality', fontsize=14)
+    plt.title('Nationality Counts', fontsize=16)
+
+    # Add value labels
+    for index, value in enumerate(nationality_counts['Count']):
+        plt.text(value, index, str(value))
+
+        # plt.show()
+    # Count the occurrences of each program
+    program_counts = df['Program'].value_counts().reset_index()
+    program_counts.columns = ['Program', 'Count']
+    # Set the size of the plot
+    plt.figure(figsize=(14, 10))
+
+    # Create a bar plot
+    sns.barplot(x='Program', y='Count', data=program_counts, palette='Spectral')
+
+
