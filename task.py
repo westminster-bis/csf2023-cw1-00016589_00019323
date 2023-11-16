@@ -452,3 +452,85 @@ def load_data():
         dataset = pd.read_csv(file_path)
         messagebox.showinfo("Information", "Data loaded successfully!")
         print(dataset.head())  #  display in the GUI
+
+# Main application window
+root = tk.Tk()
+root.title("Data Analysis")
+#   Dropdown to select the column for plotting
+column_var = tk.StringVar(root)
+column_label = ttk.Label(root, text="Select Column:")
+column_label.pack(side=tk.TOP, fill=tk.X)
+column_dropdown = ttk.Combobox(root, textvariable=column_var, values=df.columns.tolist())
+column_dropdown.pack(side=tk.TOP, fill=tk.X)
+
+# Button to perform the plot
+plot_button = ttk.Button(root, text="Plot Data", command=lambda: plot_data(column_var.get()))
+plot_button.pack(side=tk.TOP, fill=tk.X)
+
+# Entry fields to specify columns for chi-square test
+entry1_var = tk.StringVar(root)
+entry2_var = tk.StringVar(root)
+entry1_label = ttk.Label(root, text=" colum :")
+entry1_label.pack(side=tk.TOP, fill=tk.X)
+entry1_entry = ttk.Entry(root, textvariable=entry1_var)
+entry1_entry.pack(side=tk.TOP, fill=tk.X)
+entry2_label = ttk.Label(root, text="C Test:")
+entry2_label.pack(side=tk.TOP, fill=tk.X)
+entry2_entry = ttk.Entry(root, textvariable=entry2_var)
+entry2_entry.pack(side=tk.TOP, fill=tk.X)
+
+# Button to perform chi-square test
+chi_square_button = ttk.Button(root, text="Perform Test",
+                               command=lambda: chi_square_test(entry1_var.get(), entry2_var.get()))
+chi_square_button.pack(side=tk.TOP, fill=tk.X)
+
+root.mainloop()
+# Create a figure with grouped bar chart
+fig, ax = plt.subplots(figsize=(12, 6))
+
+# Load your data
+maindata = 'C:/Users/TEMA/OneDrive/Desktop/data.csv'
+dataset = pd.read_csv(maindata)
+
+# Initialize the main application window
+root = tk.Tk()
+root.title("Data Analysis")
+root.geometry("800x600")
+# Frame for plotting
+plot_frame = tk.Frame(root)
+plot_frame.pack(fill=tk.BOTH, expand=True)
+
+def show_plot(plot_function, *args):
+    # Clear previous plot
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+
+    fig = Figure(figsize=(10, 6), dpi=100)
+    ax = fig.add_subplot(111)
+
+    # Call the plotting function with the figure and axis
+    plot_function(fig, ax, *args)
+
+    # Embed the plot in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+def plot_gender_distribution(fig, ax):
+    # Your logic to plot gender distribution
+    sns.countplot(data=dataset, x='Gender', ax=ax)  # Replace 'Gender' with your column name
+
+def plot_other_chart(fig, ax):
+    # Example plotting logic for another chart
+    sns.countplot(data=dataset, x='OtherColumn', ax=ax)  # Replace 'OtherColumn' with actual column name
+
+# Buttons to trigger different plots
+button_gender = ttk.Button(root, text="Plot Gender Distribution", command=lambda: show_plot(plot_gender_distribution))
+button_gender.pack(side=tk.TOP, fill=tk.X)
+
+button_other = ttk.Button(root, text="Plot Other Chart", command=lambda: show_plot(plot_other_chart))
+button_other.pack(side=tk.TOP, fill=tk.X)
+
+# Additional buttons and functionalities can be added similarly
+
+#root.mainloop()
