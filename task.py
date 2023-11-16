@@ -453,84 +453,84 @@ def load_data():
         messagebox.showinfo("Information", "Data loaded successfully!")
         print(dataset.head())  #  display in the GUI
 
-
-# Plotting Function
-def plot_graphage():
-    global dataset
-    if dataset is not None:
-        plt.figure(figsize=(10, 4))
-        sns.countplot(data=dataset, x='Age')  # Replace with your column
-        plt.show()
-    else:
-        messagebox.showerror("Error", "Data not loaded.")
-
-
-def plot_graphgender():
-    global dataset
-    if dataset is not None:
-        plt.figure(figsize=(10, 4))
-        sns.countplot(data=dataset, x='Gender')  # Replace with your column
-        plt.show()
-    else:
-        messagebox.showerror("Error", "Data not loaded.")
-    # Main Application Window
-
-
+# Main application window
 root = tk.Tk()
-root.title("Data Analysis Project")
-root.geometry("800x600")
+root.title("Data Analysis")
+#   Dropdown to select the column for plotting
+column_var = tk.StringVar(root)
+column_label = ttk.Label(root, text="Select Column:")
+column_label.pack(side=tk.TOP, fill=tk.X)
+column_dropdown = ttk.Combobox(root, textvariable=column_var, values=df.columns.tolist())
+column_dropdown.pack(side=tk.TOP, fill=tk.X)
 
-# Load Data Button
-load_button = tk.Button(root, text="Load Data", command=load_data)
-load_button.pack()
+# Button to perform the plot
+plot_button = ttk.Button(root, text="Plot Data", command=lambda: plot_data(column_var.get()))
+plot_button.pack(side=tk.TOP, fill=tk.X)
 
-# Handle Missing Values Button
-handle_missing_button = tk.Button(root, text="Handle Missing Values", command=handle_missing_values)
-handle_missing_button.pack()
+# Entry fields to specify columns for chi-square test
+entry1_var = tk.StringVar(root)
+entry2_var = tk.StringVar(root)
+entry1_label = ttk.Label(root, text=" colum :")
+entry1_label.pack(side=tk.TOP, fill=tk.X)
+entry1_entry = ttk.Entry(root, textvariable=entry1_var)
+entry1_entry.pack(side=tk.TOP, fill=tk.X)
+entry2_label = ttk.Label(root, text="C Test:")
+entry2_label.pack(side=tk.TOP, fill=tk.X)
+entry2_entry = ttk.Entry(root, textvariable=entry2_var)
+entry2_entry.pack(side=tk.TOP, fill=tk.X)
 
-# Plot Graph age Button
-plot_button = tk.Button(root, text="Plot graph Age", command=plot_graphage())
-plot_button.pack()
-# Plot Graph  Button
-plot_button = tk.Button(root, text="Plot graph Gender", command=plot_graphgender())
-plot_button.pack()
-plot_button = tk.Button(root, text="Plot graph Age", command=plot_graphage())
-plot_button.pack()
-#
-# Run the application
+# Button to perform chi-square test
+chi_square_button = ttk.Button(root, text="Perform Test",
+                               command=lambda: chi_square_test(entry1_var.get(), entry2_var.get()))
+chi_square_button.pack(side=tk.TOP, fill=tk.X)
+
 root.mainloop()
+# Create a figure with grouped bar chart
+fig, ax = plt.subplots(figsize=(12, 6))
 
+# Load your data
+maindata = 'C:/Users/TEMA/OneDrive/Desktop/data.csv'
+dataset = pd.read_csv(maindata)
 
-def show_plot(figure):
-    # Create a new window to display the plot
-    new_window = tk.Toplevel(root)
-    canvas = FigureCanvasTkAgg(figure, new_window)
+# Initialize the main application window
+root = tk.Tk()
+root.title("Data Analysis")
+root.geometry("800x600")
+# Frame for plotting
+plot_frame = tk.Frame(root)
+plot_frame.pack(fill=tk.BOTH, expand=True)
+
+def show_plot(plot_function, *args):
+    # Clear previous plot
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+
+    fig = Figure(figsize=(10, 6), dpi=100)
+    ax = fig.add_subplot(111)
+
+    # Call the plotting function with the figure and axis
+    plot_function(fig, ax, *args)
+
+    # Embed the plot in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
-    canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+def plot_gender_distribution(fig, ax):
+    # Your logic to plot gender distribution
+    sns.countplot(data=dataset, x='Gender', ax=ax)  # Replace 'Gender' with your column name
 
-# Function to plot data
-def plot_data(column):
-    # Prepare the data
-    count_data = df[column].value_counts().reset_index()
-    count_data.columns = [column, 'Count']
+def plot_other_chart(fig, ax):
+    # Example plotting logic for another chart
+    sns.countplot(data=dataset, x='OtherColumn', ax=ax)  # Replace 'OtherColumn' with actual column name
 
-    # Create the plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=column, y='Count', data=count_data, palette='Spectral', ax=ax)
-    ax.set_title(f'Counts for {column}')
-    ax.set_xlabel(column)
-    ax.set_ylabel('Count')
+# Buttons to trigger different plots
+button_gender = ttk.Button(root, text="Plot Gender Distribution", command=lambda: show_plot(plot_gender_distribution))
+button_gender.pack(side=tk.TOP, fill=tk.X)
 
-    # Show the plot in a new window
-    show_plot(fig)
+button_other = ttk.Button(root, text="Plot Other Chart", command=lambda: show_plot(plot_other_chart))
+button_other.pack(side=tk.TOP, fill=tk.X)
 
+# Additional buttons and functionalities can be added similarly
 
-# Function to perform and show chi-square test results
-def chi_square_test(column1, column2):
-    contingency_table = pd.crosstab(df[column1], df[column2])
-    chi2, p, dof, expected = chi2_contingency(contingency_table)
-    result_text = f"Chi-Square Test between {column1} and {column2}:\nChi2 value: {chi2}\np-value: {p}\nDegrees of Freedom: {dof}"
-    # Show the results in a popup window
-    result_popup = tk.Toplevel(root)
-    ttk.Label(result_popup, text=result_text, justify=tk.LEFT).pack()
+#root.mainloop()
