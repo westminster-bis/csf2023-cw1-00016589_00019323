@@ -216,4 +216,248 @@ total, rule = e1.count_neutral(df, return_rule=True)
 print(rule)
 # Define a threshold for removal
 threshold = len(df.columns) / 2
+#Grouping by Gender and counting
 
+data = {
+    'Gender': ['Male', 'Female', 'Non-binary', 'Male', 'Female', 'Non-binary', 'Male'],
+    'Count': [10, 20, 5, 10, 20, 5, 10]  # Example counts
+}
+dataset = pd.DataFrame(data)
+
+maindata = 'C:/Users/TEMA/OneDrive/Desktop/data.csv'
+dataset = pd.read_csv(maindata)
+root = tk.Tk()
+root.title("Data Analysis")
+root.geometry("800x600")
+
+# Frame for plotting
+plot_frame = tk.Frame(root)
+plot_frame.pack(fill=tk.BOTH, expand=True)
+
+def show_plot(plot_function):
+    # Clear previous plot
+    for widget in plot_frame.winfo_children():
+        widget.destroy()
+
+    fig = Figure(figsize=(10, 6), dpi=100)
+    ax = fig.add_subplot(111)
+
+    # Call the plotting function
+    plot_function(dataset, ax)
+
+    # Embed the plot in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+def plot_age_distribution(data, ax):
+    sns.countplot(data=data, x='Age', ax=ax)  # Replace 'Age' with your column name
+def plot_nationality_distrubution(data, ax):
+    sns.countplot(data=data, x='Nationality', ax=ax)
+def plot_Program_distrubution(data, ax):
+        sns.countplot(data=data, x='Program', ax=ax)
+def plot_English_distrubution(data, ax):
+    sns.countplot(data=data, x='English', ax=ax)
+def plot_Attendance_distrubution(data, ax):
+    sns.countplot(data=data, x='Attendance', ax=ax)
+def plot_Academic_distrubution(data, ax):
+    sns.countplot(data=data, x='Academic', ax=ax)
+def plot_Course_distrubution(data, ax):
+            sns.countplot(data=data, x='Course', ax=ax)
+def plot_gender_distribution(data, ax):
+    sns.countplot(data=data, x='Gender', ax=ax)  # Replace 'Gender' with your column name
+# Buttons to trigger different plots
+age_button = ttk.Button(root, text="Plot Age Distribution", command=lambda: show_plot(plot_age_distribution))
+age_button.pack(side=tk.TOP, fill=tk.X)
+
+gender_button = ttk.Button(root, text="Plot Gender Distribution", command=lambda: show_plot(plot_gender_distribution))
+gender_button.pack(side=tk.TOP, fill=tk.X)
+nationality_button = ttk.Button(root,text="Plot Nationality Distrubution",command=lambda: show_plot(plot_nationality_distrubution))
+nationality_button.pack(side=tk.TOP,fill=tk.X)
+program_button = ttk.Button(root, text="Plot Program Distribution", command=lambda: show_plot(plot_Program_distrubution))
+program_button.pack(side=tk.TOP, fill=tk.X)
+english_button = ttk.Button(root, text="Plot English Distribution", command=lambda: show_plot(plot_English_distrubution))
+english_button.pack(side=tk.TOP, fill=tk.X)
+attendance_button = ttk.Button(root, text="Plot Attendance Distribution", command=lambda: show_plot(plot_Attendance_distrubution))
+attendance_button.pack(side=tk.TOP, fill=tk.X)
+academic_button = ttk.Button(root, text="Plot Academic Distribution", command=lambda: show_plot(plot_Academic_distrubution))
+academic_button.pack(side=tk.TOP, fill=tk.X)
+course_button = ttk.Button(root, text="Plot Course Distribution", command=lambda: show_plot(plot_Course_distrubution))
+course_button.pack(side=tk.TOP, fill=tk.X)
+
+root.mainloop()
+# Frame for the selector and button
+frame_controls = tk.Frame(root)
+frame_controls.pack(fill='x')
+
+# Label for the selector
+label = tk.Label(frame_controls, text="Choose Gender Column:")
+label.pack(side=tk.LEFT, padx=5, pady=5)
+
+# Combobox to select the gender column
+selector = ttk.Combobox(frame_controls, values=list(dataset.columns), state="readonly")
+selector.set('Gender')  # default value
+selector.pack(side=tk.LEFT, padx=5, pady=5)
+
+# Button to plot gender distribution
+button = ttk.Button(frame_controls, text='Plot Distribution', command=plot_gender_distribution)
+button.pack(side=tk.LEFT, padx=5, pady=5)
+
+# Run the application
+root.mainloop()
+#plt.show()
+# Count the occurrences of each nationality
+nationality_counts = df['Nationality'].value_counts().reset_index()
+nationality_counts.columns = ['Nationality', 'Count']
+
+# Set the size of the plot
+plt.figure(figsize=(100, 8))
+
+# Create a bar plot
+
+# Assuming nationality_counts is a DataFrame with columns 'Nationality' and 'Count'
+sns.barplot(x='Count', y='Nationality', hue='Nationality', data=nationality_counts, palette='Spectral', legend=False)
+# Add other customization as needed
+
+# Add labels and title
+plt.xlabel('Count', fontsize=14)
+plt.ylabel('Nationality', fontsize=14)
+plt.title('Nationality Counts', fontsize=16)
+
+# Add value labels
+for index, value in enumerate(nationality_counts['Count']):
+    plt.text(value, index, str(value))
+
+#plt.show()
+# Count the occurrences of each program
+program_counts = df['Program'].value_counts().reset_index()
+program_counts.columns = ['Program', 'Count']
+# Set the size of the plot
+plt.figure(figsize=(14, 10))
+
+# Create a bar plot
+sns.barplot(x='Program', y='Count', data=program_counts, palette='Spectral')
+
+# Add labels and title
+plt.xlabel('Program', fontsize=14)
+plt.ylabel('Count', fontsize=14)
+plt.title('Counts in Each Program', fontsize=16)
+# Rotate x-labels for better readability
+plt.xticks(rotation=45)
+
+# Add value labels
+for index, value in enumerate(program_counts['Count']):
+    plt.text(index, value, str(value), ha='center')
+
+#plt.show()
+# Count the occurrences of each course
+course_counts = df['Course'].value_counts().reset_index()
+course_counts.columns = ['Course', 'Count']
+# Set the size of the plot
+plt.figure(figsize=(12, 8))
+
+# Create a horizontal bar plot
+sns.barplot(x='Count', y='Course', data=course_counts, palette='Spectral')
+
+# Add labels and title
+plt.xlabel('Count', fontsize=14)
+plt.ylabel('Course', fontsize=14)
+plt.title('Counts in Each Course', fontsize=16)
+
+# Add value labels on the bars
+for index, value in enumerate(course_counts['Count']):
+    plt.text(value, index, str(value), va='center')
+
+#plt.show()
+# Count the occurrences of each English score
+english_counts = df['English'].value_counts().reset_index()
+english_counts.columns = ['English Course Mark', 'Count']
+
+# Set the size of the plot
+plt.figure(figsize=(12, 8))
+
+# Create a bar plot
+sns.barplot(x='English Course Mark', y='Count', data=english_counts, palette='Spectral')
+
+# Add labels and title
+plt.xlabel('English Course Mark', fontsize=14)
+plt.ylabel('Count', fontsize=14)
+plt.title('Counts in Each English Course Mark', fontsize=16)
+
+# Rotate x-labels for better readability
+plt.xticks(rotation=45)
+
+# Add value labels on the bars
+for index, value in enumerate(english_counts['Count']):
+    plt.text(index, value, str(value), ha='center', va='bottom')
+
+#plt.show()
+# Count the occurrences of each academic score
+academic_counts = df['Academic'].value_counts().reset_index()
+academic_counts.columns = ['Academic Course Mark', 'Count']
+# Set the size of the plot
+plt.figure(figsize=(12, 8))
+
+# Create a bar plot
+sns.barplot(x='Academic Course Mark', y='Count', data=academic_counts, palette='Spectral')
+
+# Add labels and title
+plt.xlabel('Academic Course Mark', fontsize=14)
+plt.ylabel('Count', fontsize=14)
+plt.title('Counts in Each Academic Course Mark', fontsize=16)
+
+# Rotate x-labels for better readability
+plt.xticks(rotation=45)
+
+# Add value labels on the bars
+for index, value in enumerate(academic_counts['Count']):
+    plt.text(index, value, str(value), ha='center', va='bottom')
+
+#plt.show()
+
+# Count the occurrences of each attendance group
+attendance_counts = df['Attendance'].value_counts().reset_index()
+attendance_counts.columns = ['Attendance Group', 'Count']
+# Set the size of the plot
+plt.figure(figsize=(12, 8))
+
+# Create a bar plot
+sns.barplot(x='Attendance Group', y='Count', data=attendance_counts, palette='Spectral')
+
+# Add labels and title
+plt.xlabel('Attendance Group', fontsize=14)
+plt.ylabel('Count', fontsize=14)
+plt.title('Counts in Each Attendance Group', fontsize=16)
+
+# Rotate x-labels for better readability
+plt.xticks(rotation=45)
+
+# Add value labels on the bars
+for index, value in enumerate(attendance_counts['Count']):
+    plt.text(index, value, str(value), ha='center', va='bottom')
+
+
+# Example of fixing the FutureWarning in barplot
+sns.barplot(x='Program', y='Count', data=program_counts, hue='Program', palette='Spectral', legend=False)
+
+
+
+# Initialize global variables
+dataset = None
+
+# Load Data Function
+def load_data():
+    global dataset
+    file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
+    if file_path:
+        dataset = pd.read_csv(file_path)
+        messagebox.showinfo("Information", "Data loaded successfully!")
+        print(dataset.head())  #  display in the GUI
+
+# Handle Missing Values Function
+def handle_missing_values():
+    global dataset
+    if dataset is not None:
+        dataset.dropna(inplace=True)
+        messagebox.showinfo("Information", "Missing values handled.")
+    else:
+        messagebox.showerror("Error", "Data not loaded.")
